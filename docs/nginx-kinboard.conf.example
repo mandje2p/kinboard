@@ -11,6 +11,10 @@ server {
 
     location / {
         proxy_pass http://127.0.0.1:3002;
+        # Kinboard builds some redirects (e.g. after the Google OAuth callback)
+        # from the container's own address (0.0.0.0:3000). Rewrite them to the
+        # public host, otherwise the browser lands on https://0.0.0.0/...
+        proxy_redirect ~^https?://0\.0\.0\.0(:[0-9]+)?(/.*)$ https://$host$2;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;

@@ -67,6 +67,10 @@ sudo nginx -t && sudo systemctl reload nginx      # ne recharge que si le test p
 sudo apt-get install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d maison.2points.fr
 ```
+Le modèle contient une directive `proxy_redirect` : sans elle, les redirections
+que Kinboard construit lui-même (par exemple le retour de la connexion Google
+Agenda) pointent vers `0.0.0.0` et le navigateur affiche `ERR_SSL_PROTOCOL_ERROR`.
+
 Vérifie ensuite que l'API existante répond toujours comme avant.
 
 ## 5. Sécurité (tentatives de connexion SSH observées le 18/11/2026)
