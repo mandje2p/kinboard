@@ -21,13 +21,14 @@ export interface WidgetVisibility {
   countdown: boolean;
   thermostat: boolean;
   youtube: boolean;
+  homekit: boolean;
 }
 
 export const DEFAULT_WIDGET_ORDER: (keyof WidgetVisibility)[] = [
   "weather", "upcomingEvents", "schedule", "birthday", "holidays", "weekOverview",
   "mealPlan", "wasteCollection", "tasks", "shopping", "notes",
   "vehicles", "stonks", "pocketMoney", "creatures", "photos", "timers", "media", "messages",
-  "countdown", "thermostat", "youtube",
+  "countdown", "thermostat", "youtube", "homekit",
 ];
 
 // Defaults are curated for kiosk glanceability — 6 widgets fill a 4-col landscape grid
@@ -74,6 +75,8 @@ export const DEFAULT_WIDGET_VISIBILITY: WidgetVisibility = {
   // shortcuts someone has pasted in. Neither has anything to show on a fresh install.
   thermostat: false,
   youtube: false,
+  // Opt-in: only works inside the Kinboard iPad app (Apple Home / HomeKit).
+  homekit: false,
 };
 
 // Read-side migration: legacy widget_visibility blobs persisted before

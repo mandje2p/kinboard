@@ -20,6 +20,7 @@ const LG_SIZES: Record<string, [number, number]> = {
   timers: [3, 4],
   messages: [3, 4],
   weather: [3, 5],
+  homekit: [4, 8],
 };
 const DEFAULT_LG: [number, number] = [3, 5];
 
