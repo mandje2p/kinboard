@@ -4178,6 +4178,9 @@
     "modeFailed": "Modus konnte nicht geändert werden"
   },
   "homekitWidget": {
+    "rooms": "Räume",
+    "allRooms": "Alle",
+    "heatingStatus": "Heizt · aktuell {temp}°",
     "title": "Zuhause",
     "demo": "Demo",
     "unavailable": "Verfügbar in der Kinboard-iPad-App, die sich mit Apple Home verbindet.",

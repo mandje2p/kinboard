@@ -31,6 +31,8 @@ export function useHomeDevices() {
   const [error, setError] = useState<string | null>(null);
   const bridgeRef = useRef<NativeHomeBridge | null>(null);
   const timers = useRef(new Map<string, ReturnType<typeof setTimeout>>());
+  const devicesRef = useRef<HomeDevice[]>([]);
+  devicesRef.current = devices;
 
   const refresh = useCallback(async (bridge: NativeHomeBridge): Promise<boolean> => {
     const status = await bridge.request("status");
@@ -112,6 +114,12 @@ export function useHomeDevices() {
   /** Change one value: shown immediately, written now (switches) or after a pause (sliders). */
   const act = useCallback(
     (id: string, key: HomeSetKey, value: number | boolean) => {
+      // Dimming a light that is off means "switch it on": not every accessory
+      // does that by itself when it receives a brightness, so say it.
+      const current = devicesRef.current.find((d) => d.id === id);
+      if (key === "brightness" && Number(value) > 0 && current?.on === false) {
+        void write(id, "on", true);
+      }
       setDevices((prev) =>
         prev.map((d) => {
           if (d.id !== id) return d;

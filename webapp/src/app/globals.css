@@ -383,26 +383,26 @@
      card, no nested blurs, no animated backdrop. Cards get their frosted look
      from the rules in the glass block below the base layer. */
   .palette-glass {
-    --background:215 60% 82%; --foreground:220 30% 12%;
-    --card:0 0% 100%; --card-foreground:220 30% 12%;
-    --popover:0 0% 100%; --popover-foreground:220 30% 12%;
-    --secondary:0 0% 100%; --secondary-foreground:220 30% 12%;
-    --muted:0 0% 100%; --muted-foreground:220 14% 36%; --label-foreground:220 20% 22%;
-    --accent:0 0% 100%; --accent-foreground:220 30% 12%;
-    --border:0 0% 100%; --input:0 0% 100%; --priority-low:220 14% 36%;
-    --shadow-rgb:20 30 80;
-    --glass-alpha:0.34; --glass-border-alpha:0.55; --glass-blur:14px;
+    --background:212 24% 72%; --foreground:215 32% 14%;
+    --card:0 0% 100%; --card-foreground:215 32% 14%;
+    --popover:0 0% 100%; --popover-foreground:215 32% 14%;
+    --secondary:0 0% 100%; --secondary-foreground:215 32% 14%;
+    --muted:0 0% 100%; --muted-foreground:215 14% 36%; --label-foreground:215 20% 22%;
+    --accent:0 0% 100%; --accent-foreground:215 32% 14%;
+    --border:0 0% 100%; --input:0 0% 100%; --priority-low:215 14% 36%;
+    --shadow-rgb:30 50 80;
+    --glass-alpha:0.4; --glass-border-alpha:0.7; --glass-blur:20px;
   }
   .dark.palette-glass {
-    --background:232 45% 14%; --foreground:0 0% 96%;
-    --card:220 40% 30%; --card-foreground:0 0% 96%;
-    --popover:228 40% 20%; --popover-foreground:0 0% 96%;
-    --secondary:220 40% 30%; --secondary-foreground:0 0% 96%;
-    --muted:220 40% 30%; --muted-foreground:220 20% 75%; --label-foreground:220 25% 82%;
-    --accent:220 40% 30%; --accent-foreground:0 0% 96%;
-    --border:0 0% 100%; --input:0 0% 100%; --priority-low:220 20% 75%;
+    --background:222 30% 11%; --foreground:0 0% 96%;
+    --card:215 35% 32%; --card-foreground:0 0% 96%;
+    --popover:222 32% 18%; --popover-foreground:0 0% 96%;
+    --secondary:215 35% 32%; --secondary-foreground:0 0% 96%;
+    --muted:215 35% 32%; --muted-foreground:215 20% 75%; --label-foreground:215 25% 82%;
+    --accent:215 35% 32%; --accent-foreground:0 0% 96%;
+    --border:0 0% 100%; --input:0 0% 100%; --priority-low:215 20% 75%;
     --shadow-rgb:0 0 20;
-    --glass-alpha:0.16; --glass-border-alpha:0.22; --glass-blur:14px;
+    --glass-alpha:0.16; --glass-border-alpha:0.22; --glass-blur:20px;
   }
 }
 
@@ -419,16 +419,16 @@
   pointer-events: none;
   display: block;
   background:
-    radial-gradient(60vmax 60vmax at 12% 8%, hsl(262 85% 72% / .75), transparent 60%),
-    radial-gradient(55vmax 55vmax at 88% 18%, hsl(196 90% 68% / .70), transparent 62%),
-    radial-gradient(60vmax 60vmax at 70% 95%, hsl(330 80% 74% / .55), transparent 60%),
+    radial-gradient(70vmax 60vmax at 18% 8%, hsl(205 40% 88% / .85), transparent 60%),
+    radial-gradient(60vmax 55vmax at 90% 18%, hsl(215 28% 58% / .75), transparent 62%),
+    radial-gradient(70vmax 60vmax at 55% 100%, hsl(200 24% 52% / .65), transparent 60%),
     hsl(var(--background));
 }
 .dark.palette-glass body::before {
   background:
-    radial-gradient(60vmax 60vmax at 12% 8%, hsl(262 70% 40% / .75), transparent 60%),
-    radial-gradient(55vmax 55vmax at 88% 18%, hsl(200 80% 38% / .65), transparent 62%),
-    radial-gradient(60vmax 60vmax at 70% 95%, hsl(320 65% 36% / .55), transparent 60%),
+    radial-gradient(70vmax 60vmax at 18% 8%, hsl(215 55% 30% / .75), transparent 60%),
+    radial-gradient(60vmax 55vmax at 90% 18%, hsl(190 45% 28% / .55), transparent 62%),
+    radial-gradient(70vmax 60vmax at 55% 100%, hsl(235 40% 24% / .65), transparent 60%),
     hsl(var(--background));
 }
 
@@ -445,6 +445,7 @@
 }
 /* Cards already carry radius via rounded-2xl; push the glass look a bit more. */
 .palette-glass .accent-border-top { border-top-width: 1px; }
+.palette-glass .rounded-2xl.bg-card { border-radius: 1.75rem; }
 .palette-glass .icon-badge { background: hsl(0 0% 100% / .28); }
 .dark.palette-glass .icon-badge { background: hsl(0 0% 100% / .14); }
 
@@ -1331,4 +1332,167 @@ html[data-screensaver] nav {
   border-right: 3px solid hsl(var(--primary));
   border-bottom: 3px solid hsl(var(--primary));
   border-radius: 0 0 6px 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Home tiles, iOS glass style (components/widgets/homekit-widget.tsx).
+   Translucent fills only: the widget card behind them already carries the
+   backdrop blur, and a second blur per tile is too heavy for an iPad 6.
+   ------------------------------------------------------------------------- */
+:root {
+  --tile-bg: hsl(var(--muted) / 0.55);
+  --tile-bg-on: hsl(var(--primary) / 0.14);
+  --tile-border: hsl(var(--border) / 0.6);
+  --tile-border-on: hsl(var(--primary) / 0.45);
+  --tile-shadow: none;
+  --power-bg: hsl(var(--muted));
+  --power-bg-on: hsl(var(--primary) / 0.2);
+  --power-on: 152 62% 42%;
+  --chip-bg-active: hsl(var(--primary) / 0.18);
+  --range-fill: hsl(var(--primary) / 0.85);
+  --range-rest: hsl(var(--muted));
+}
+.palette-glass {
+  --tile-bg: rgba(255, 255, 255, 0.42);
+  --tile-bg-on: rgba(255, 255, 255, 0.8);
+  --tile-border: rgba(255, 255, 255, 0.6);
+  --tile-border-on: rgba(255, 255, 255, 0.98);
+  --tile-shadow: 0 10px 28px rgba(35, 55, 85, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  --power-bg: rgba(255, 255, 255, 0.7);
+  --power-bg-on: rgba(255, 255, 255, 0.98);
+  --chip-bg-active: rgba(255, 255, 255, 0.7);
+  --range-fill: #fff;
+  --range-rest: rgba(70, 95, 130, 0.24);
+}
+.dark.palette-glass {
+  --tile-bg: rgba(255, 255, 255, 0.09);
+  --tile-bg-on: rgba(255, 255, 255, 0.24);
+  --tile-border: rgba(255, 255, 255, 0.18);
+  --tile-border-on: rgba(255, 255, 255, 0.55);
+  --tile-shadow: 0 10px 28px rgba(0, 0, 25, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  --power-bg: rgba(255, 255, 255, 0.16);
+  --power-bg-on: rgba(255, 255, 255, 0.92);
+  --chip-bg-active: rgba(255, 255, 255, 0.24);
+  --range-fill: rgba(255, 255, 255, 0.9);
+  --range-rest: rgba(255, 255, 255, 0.18);
+}
+
+.glass-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.9rem;
+  min-height: 8.75rem;
+  padding: 0.95rem;
+  border-radius: 1.75rem;
+  border: 1px solid var(--tile-border);
+  background: var(--tile-bg);
+  box-shadow: var(--tile-shadow);
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.glass-tile[data-on="true"] { background: var(--tile-bg-on); border-color: var(--tile-border-on); }
+.glass-tile[data-reachable="false"] { opacity: 0.5; cursor: default; }
+.glass-tile:active { transform: scale(0.985); }
+.glass-tile-icon {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  background: var(--power-bg);
+  color: hsl(var(--muted-foreground));
+}
+.glass-tile[data-on="true"] .glass-tile-icon { color: hsl(var(--foreground)); }
+
+.glass-power {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  background: var(--power-bg);
+  color: hsl(var(--muted-foreground));
+  box-shadow: 0 2px 8px rgba(30, 50, 80, 0.16);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.glass-tile[data-on="true"] .glass-power { background: var(--power-bg-on); color: hsl(var(--power-on)); }
+.glass-power:disabled { cursor: default; }
+
+.glass-chip {
+  flex: none;
+  padding: 0.35rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid var(--tile-border);
+  font-size: 0.875rem;
+  white-space: nowrap;
+  color: hsl(var(--muted-foreground));
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.glass-chip[data-active="true"] {
+  background: var(--chip-bg-active);
+  border-color: var(--tile-border-on);
+  color: hsl(var(--foreground));
+  box-shadow: 0 2px 8px rgba(30, 50, 80, 0.12);
+}
+
+.glass-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: 9999px;
+  background: var(--power-bg);
+  box-shadow: inset 0 1px 3px rgba(30, 50, 80, 0.14);
+}
+.glass-stepper button {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  color: hsl(var(--foreground));
+}
+.glass-stepper button:disabled { opacity: 0.4; }
+
+.glass-range-wrap { position: relative; display: flex; align-items: center; }
+.glass-range-icon {
+  position: absolute;
+  left: 0.65rem;
+  z-index: 1;
+  color: hsl(var(--foreground) / 0.65);
+  pointer-events: none;
+}
+.glass-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 2.5rem;
+  margin: 0;
+  border-radius: 9999px;
+  outline: none;
+  cursor: pointer;
+  background: linear-gradient(to right, var(--range-fill) var(--fill, 50%), var(--range-rest) var(--fill, 50%));
+  box-shadow: inset 0 1px 3px rgba(30, 50, 80, 0.22), 0 0 0 1px rgba(70, 95, 130, 0.12);
+  touch-action: pan-y;
+}
+.glass-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 0.4rem;
+  height: 1.6rem;
+  border-radius: 9999px;
+  background: #fff;
+  border: 1px solid rgba(30, 50, 80, 0.12);
+  box-shadow: 0 1px 5px rgba(30, 50, 80, 0.4);
+}
+.glass-range::-moz-range-thumb {
+  width: 0.4rem;
+  height: 1.6rem;
+  border-radius: 9999px;
+  background: #fff;
+  border: 1px solid rgba(30, 50, 80, 0.12);
+  box-shadow: 0 1px 5px rgba(30, 50, 80, 0.4);
 }
