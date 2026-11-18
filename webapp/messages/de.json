@@ -4126,6 +4126,10 @@
     "roomsUnavailable": "Räume konnten gerade nicht geladen werden."
   },
   "dashboard": {
+    "gridCustomize": "Anpassen",
+    "gridDone": "Fertig",
+    "gridReset": "Zurücksetzen",
+    "gridHint": "Widget ziehen zum Verschieben, untere rechte Ecke ziehen zum Ändern der Größe.",
     "ariaClock": "Uhr und Familienmitglieder",
     "ariaWidgets": "Dashboard Widgets",
     "pluginDiscover": {

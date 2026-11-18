@@ -4126,6 +4126,10 @@
     "roomsUnavailable": "Rooms couldn't be loaded right now."
   },
   "dashboard": {
+    "gridCustomize": "Customize",
+    "gridDone": "Done",
+    "gridReset": "Reset",
+    "gridHint": "Drag a widget to move it, drag its bottom-right corner to resize it.",
     "ariaClock": "Clock and family members",
     "ariaWidgets": "Dashboard widgets",
     "pluginDiscover": {

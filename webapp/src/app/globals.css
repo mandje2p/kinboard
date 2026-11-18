@@ -1288,3 +1288,47 @@ html[data-screensaver] nav {
   animation: none;
   opacity: 0.9;
 }
+
+/* Free-form widget grid (react-grid-layout). Cells are fixed-height, so the
+   card inside fills its cell and scrolls rather than growing. */
+.kb-grid-item,
+.kb-grid-item > .kb-cell { height: 100%; }
+.kb-cell { display: flex; flex-direction: column; gap: 1rem; }
+.kb-cell > * { flex: 1 1 0; min-height: 0; }
+.kb-cell a.block > * { height: 100%; }
+.kb-cell .accent-border-top { overflow: auto; height: 100%; }
+
+/* Edit mode: outline each widget, make it grabbable, and keep taps from
+   opening the widget underneath the finger. */
+.kb-grid-editing .kb-grid-item {
+  cursor: grab;
+  touch-action: none;
+  outline: 2px dashed hsl(var(--primary) / 0.6);
+  outline-offset: 3px;
+  border-radius: 1.25rem;
+}
+.kb-grid-editing .kb-grid-item.react-draggable-dragging { cursor: grabbing; z-index: 20; opacity: .92; }
+.kb-grid-editing .kb-grid-item > :not(.react-resizable-handle) { pointer-events: none; user-select: none; }
+.kb-grid-editing .react-grid-placeholder {
+  background: hsl(var(--primary) / 0.25);
+  border-radius: 1.25rem;
+  opacity: 1;
+}
+/* A finger-sized corner handle instead of the default 20px glyph. The
+   selectors are as specific as the library's own, plus .kb-grid, so they win
+   whatever order the stylesheets load in. */
+.kb-grid .react-grid-item > .react-resizable-handle.react-resizable-handle-se {
+  width: 44px; height: 44px;
+  right: 0; bottom: 0;
+  background-image: none;
+  touch-action: none;
+  cursor: nwse-resize;
+}
+.kb-grid .react-grid-item > .react-resizable-handle.react-resizable-handle-se::after {
+  content: "";
+  right: 10px; bottom: 10px;
+  width: 14px; height: 14px;
+  border-right: 3px solid hsl(var(--primary));
+  border-bottom: 3px solid hsl(var(--primary));
+  border-radius: 0 0 6px 0;
+}

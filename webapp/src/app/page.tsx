@@ -1,6 +1,7 @@
 "use client";
 
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
+import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { Clock } from "@/components/widgets/clock";
 import { Weather } from "@/components/widgets/weather";
@@ -33,6 +34,12 @@ import { AttentionWidget } from "@/components/widgets/attention-widget";
 import { GettingStartedChecklist } from "@/components/getting-started-checklist";
 import { ConnectivityBanner } from "@/components/connectivity-banner";
 import { ShoppingInstallPrompt } from "@/components/shopping-install-prompt";
+import { WidgetGridToolbar } from "@/components/widget-grid-toolbar";
+import { useWidgetGrid } from "@/hooks/use-widget-grid";
+import type { GridLayouts } from "@/lib/widget-grid";
+
+// react-grid-layout measures the DOM, so it never renders on the server.
+const ResizableWidgetGrid = dynamic(() => import("@/components/resizable-widget-grid"), { ssr: false });
 import {
   useKeyboardShortcuts,
   useSwipeNavigation,
@@ -63,6 +70,11 @@ export default function DashboardPage() {
   const { showSeconds } = useThemeSettings();
   const [homeLayout] = useHomeLayout();
   const [savedWidgetOrder] = useWidgetOrder();
+  // Free-form layout (drag + resize). Null until someone customises: the
+  // classic automatic grid stays the default and nothing changes for them.
+  const { layouts: gridLayouts, save: saveGridLayouts, reset: resetGridLayouts } = useWidgetGrid();
+  const [gridEditing, setGridEditing] = useState(false);
+  const [gridDraft, setGridDraft] = useState<GridLayouts | null>(null);
 
   // Load widget visibility settings
   const { data: widgets } = useSetting<WidgetVisibility>(
@@ -151,6 +163,8 @@ export default function DashboardPage() {
     countdown: <CountdownWidget />,
   };
   const widgetKeys = mergeWidgetOrder(DEFAULT_WIDGET_ORDER, savedWidgetOrder);
+  const visibleWidgetKeys = widgetKeys.filter((key) => w[key]);
+  const useFreeGrid = gridEditing || gridLayouts !== null;
 
   // Enable keyboard shortcuts for navigation
   useKeyboardShortcuts();
@@ -244,6 +258,39 @@ export default function DashboardPage() {
             the screens being talked to (RFC-005 §6). */}
         {w.messages && <MessageTakeover />}
 
+        <div className="relative z-[1] mt-auto w-full max-w-[2200px] mx-auto">
+          <WidgetGridToolbar
+            editing={gridEditing}
+            hasCustomLayout={gridLayouts !== null}
+            onEdit={() => {
+              setGridDraft(null);
+              setGridEditing(true);
+            }}
+            onDone={() => {
+              if (gridDraft) saveGridLayouts(gridDraft);
+              setGridEditing(false);
+              setGridDraft(null);
+            }}
+            onReset={() => {
+              resetGridLayouts();
+              setGridEditing(false);
+              setGridDraft(null);
+            }}
+          />
+          {useFreeGrid ? (
+            <section className="festival-grid relative w-full" aria-label={t("ariaWidgets")}>
+              <FloatingLightsFab />
+              <div className="mb-4 empty:hidden">
+                <AttentionWidget />
+              </div>
+              <ResizableWidgetGrid
+                items={visibleWidgetKeys.map((key) => ({ id: key, node: widgetCards[key] }))}
+                layouts={gridDraft ?? gridLayouts}
+                editing={gridEditing}
+                onLayoutsChange={setGridDraft}
+              />
+            </section>
+          ) : (
         <section className="festival-grid relative z-[1] mt-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 portrait:lg:grid-cols-2 2xl:grid-cols-5 min-[2000px]:grid-cols-6 auto-rows-min items-start gap-4 md:gap-6 w-full max-w-[2200px] mx-auto" aria-label={t("ariaWidgets")}>
           <FloatingLightsFab />
           {/* First, and across the whole width: this is what the family has to
@@ -252,8 +299,10 @@ export default function DashboardPage() {
               Deliberately not behind a visibility toggle: individual hints are
               switched off from themselves, which is the finer control. */}
           <AttentionWidget />
-          {widgetKeys.filter((key) => w[key]).map((key) => <Fragment key={key}>{widgetCards[key]}</Fragment>)}
+          {visibleWidgetKeys.map((key) => <Fragment key={key}>{widgetCards[key]}</Fragment>)}
         </section>
+          )}
+        </div>
       </div>
     </main>
   );

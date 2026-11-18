@@ -4126,6 +4126,10 @@
     "roomsUnavailable": "Impossible de charger les pièces pour le moment."
   },
   "dashboard": {
+    "gridCustomize": "Personnaliser",
+    "gridDone": "Terminer",
+    "gridReset": "Réinitialiser",
+    "gridHint": "Glissez un widget pour le déplacer, tirez le coin en bas à droite pour le redimensionner.",
     "ariaClock": "Horloge et membres de la famille",
     "ariaWidgets": "Widgets du tableau de bord",
     "pluginDiscover": {
