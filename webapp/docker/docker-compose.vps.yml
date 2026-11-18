@@ -1,0 +1,29 @@
+# Overlay for a shared VPS that already runs other services behind its own
+# nginx (see docs/DEPLOY-VPS-HOSTINGER.md):
+#
+#   COMPOSE_FILES="-f docker-compose.yml -f docker-compose.vps.yml"   (in .env)
+#
+# What it changes, and why:
+#  - the webapp image comes from the fork's GitHub Container Registry, built by
+#    the "Docker image" workflow, so it carries the Glass theme, the resizable
+#    grid and the Thermostat/YouTube widgets (the default image does not);
+#  - the webapp listens on 127.0.0.1 only: the VPS's nginx is the only way in.
+#    Default port 3002, because 3001 is taken by another app on that machine;
+#  - Postgres is NOT published on the host at all. By default it is published
+#    on 0.0.0.0:5432, and Docker's port publishing bypasses ufw, so on a public
+#    VPS that would put the database on the internet;
+#  - go2rtc's WebRTC UDP port is not published (no cameras assumed).
+#
+# `!override` / `!reset` need Docker Compose v2.24 or newer (Docker's own apt
+# repository ships it).
+
+services:
+  webapp:
+    image: ghcr.io/mandje2p/kinboard:${KINBOARD_TAG:-feature-resizable-grid}
+    ports: !override
+      - "127.0.0.1:${WEBAPP_PORT:-3002}:3000"
+  db:
+    ports: !reset []
+  go2rtc:
+    ports: !override
+      - "127.0.0.1:${GO2RTC_HTTP_PORT:-1984}:1984"
