@@ -26,6 +26,8 @@ import {
   MessageSquare,
   GripVertical,
   CalendarClock,
+  Thermometer,
+  Youtube,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -71,6 +73,8 @@ const WIDGET_CONFIGS: WidgetConfig[] = [
   { key: "media", labelKey: "mediaLabel", descriptionKey: "mediaDescription", previewKeys: ["mediaPreview1", "mediaPreview2"], icon: Music },
   { key: "messages", labelKey: "messagesLabel", descriptionKey: "messagesDescription", previewKeys: ["messagesPreview1", "messagesPreview2"], icon: MessageSquare },
   { key: "countdown", labelKey: "countdownLabel", descriptionKey: "countdownDescription", previewKeys: ["countdownPreview1"], icon: CalendarClock },
+  { key: "thermostat", labelKey: "thermostatLabel", descriptionKey: "thermostatDescription", previewKeys: ["thermostatPreview1", "thermostatPreview2"], icon: Thermometer },
+  { key: "youtube", labelKey: "youtubeLabel", descriptionKey: "youtubeDescription", previewKeys: ["youtubePreview1", "youtubePreview2"], icon: Youtube },
 ];
 
 export default function WidgetSettingsPage() {

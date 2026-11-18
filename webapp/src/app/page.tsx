@@ -20,6 +20,8 @@ import { CreaturesWidget } from "@/components/widgets/creatures-widget";
 import { TimerWidget } from "@/components/widgets/timer-widget";
 import { CountdownWidget } from "@/components/widgets/countdown-widget";
 import { MediaPlayerWidget } from "@/components/widgets/media-player-widget";
+import { ThermostatWidget } from "@/components/widgets/thermostat-widget";
+import { YouTubeWidget } from "@/components/widgets/youtube-widget";
 import { MessagesWidget } from "@/components/widgets/messages-widget";
 import { MessageTakeover } from "@/components/message-takeover";
 import { NotesWidget } from "@/components/widgets/notes-widget";
@@ -161,6 +163,8 @@ export default function DashboardPage() {
     media: <MediaPlayerWidget />,
     messages: <MessagesWidget />,
     countdown: <CountdownWidget />,
+    thermostat: <ThermostatWidget />,
+    youtube: <YouTubeWidget />,
   };
   const widgetKeys = mergeWidgetOrder(DEFAULT_WIDGET_ORDER, savedWidgetOrder);
   const visibleWidgetKeys = widgetKeys.filter((key) => w[key]);

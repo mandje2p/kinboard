@@ -19,13 +19,15 @@ export interface WidgetVisibility {
   media: boolean;
   messages: boolean;
   countdown: boolean;
+  thermostat: boolean;
+  youtube: boolean;
 }
 
 export const DEFAULT_WIDGET_ORDER: (keyof WidgetVisibility)[] = [
   "weather", "upcomingEvents", "schedule", "birthday", "holidays", "weekOverview",
   "mealPlan", "wasteCollection", "tasks", "shopping", "notes",
   "vehicles", "stonks", "pocketMoney", "creatures", "photos", "timers", "media", "messages",
-  "countdown",
+  "countdown", "thermostat", "youtube",
 ];
 
 // Defaults are curated for kiosk glanceability — 6 widgets fill a 4-col landscape grid
@@ -68,6 +70,10 @@ export const DEFAULT_WIDGET_VISIBILITY: WidgetVisibility = {
   // feature switch: RFC-005 §6.
   messages: true,
   countdown: false,
+  // Opt-in: thermostat needs Home Assistant climate entities, YouTube needs
+  // shortcuts someone has pasted in. Neither has anything to show on a fresh install.
+  thermostat: false,
+  youtube: false,
 };
 
 // Read-side migration: legacy widget_visibility blobs persisted before
