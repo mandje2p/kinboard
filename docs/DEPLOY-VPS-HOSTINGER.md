@@ -46,11 +46,12 @@ git clone https://github.com/mandje2p/kinboard.git /opt/kinboard
 cd /opt/kinboard && git checkout feature/resizable-grid
 ./setup.sh --non-interactive --url https://cuisine.tondomaine.fr
 cd webapp/docker
-cat >> .env <<'ENVEOF'
-WEBAPP_PORT=3002
-KINBOARD_TAG=feature-resizable-grid
-COMPOSE_FILES="-f docker-compose.yml -f docker-compose.vps.yml"
-ENVEOF
+# setup.sh a déjà écrit WEBAPP_PORT=3001 (pris par bnvce-api) : on remplace, on n'ajoute pas un doublon
+set_env() { if grep -q "^$1=" .env; then sed -i "s|^$1=.*|$1=$2|" .env; else echo "$1=$2" >> .env; fi; }
+set_env WEBAPP_PORT 3002
+set_env KINBOARD_TAG feature-resizable-grid
+set_env COMPOSE_FILES '"-f docker-compose.yml -f docker-compose.vps.yml"'
+grep -E '^(WEBAPP_PORT|KINBOARD_TAG|COMPOSE_FILES|SITE_URL)=' .env
 sudo docker compose -f docker-compose.yml -f docker-compose.vps.yml config >/dev/null && echo "config OK"
 ./start.sh up    # (ajoute sudo si ton utilisateur n'est pas dans le groupe docker)
 ./start.sh status
