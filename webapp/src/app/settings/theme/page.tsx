@@ -66,6 +66,11 @@ const PALETTES: { id: Palette; light: Swatch; dark: Swatch }[] = [
     light: { bg: "0 0% 94%", card: "0 0% 99%", border: "0 0% 85%", text: "0 0% 9%" },
     dark: { bg: "0 0% 5%", card: "0 0% 9%", border: "0 0% 18%", text: "0 0% 93%" },
   },
+  {
+    id: "glass",
+    light: { bg: "215 60% 82%", card: "0 0% 100%", border: "0 0% 100%", text: "220 30% 12%" },
+    dark: { bg: "232 45% 14%", card: "220 40% 30%", border: "0 0% 100%", text: "0 0% 96%" },
+  },
 ];
 
 // Per-device text scale (localStorage, not the Supabase theme blob above —

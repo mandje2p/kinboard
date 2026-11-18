@@ -19,7 +19,7 @@ const MONTHLY_THEMES = [
   "theme-december",
 ];
 
-export type Palette = "salbei" | "sand" | "warmgrey" | "graphite";
+export type Palette = "salbei" | "sand" | "warmgrey" | "graphite" | "glass";
 
 // Sand is the base (no class); the others are override classes in globals.css.
 const PALETTE_CLASSES: Record<Palette, string | null> = {
@@ -27,9 +27,10 @@ const PALETTE_CLASSES: Record<Palette, string | null> = {
   salbei: "palette-salbei",
   warmgrey: "palette-warmgrey",
   graphite: "palette-graphite",
+  glass: "palette-glass",
 };
 /** Every class PALETTE_CLASSES can apply, so switching palettes removes the old one. */
-export const ALL_PALETTE_CLASSES = ["palette-salbei", "palette-warmgrey", "palette-graphite"];
+export const ALL_PALETTE_CLASSES = ["palette-salbei", "palette-warmgrey", "palette-graphite", "palette-glass"];
 
 export interface ThemeSettings {
   themeOverride: number | null;

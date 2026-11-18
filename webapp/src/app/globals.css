@@ -377,6 +377,80 @@
     --accent:0 0% 14%; --accent-foreground:0 0% 93%;
     --border:0 0% 18%; --input:0 0% 18%; --priority-low:0 0% 63%;
   }
+
+  /* Glass ("liquid glass" / iOS-style): translucent frosted surfaces over a
+     colourful backdrop. Tuned for an iPad 6 (A10): a single, modest blur per
+     card, no nested blurs, no animated backdrop. Cards get their frosted look
+     from the rules in the glass block below the base layer. */
+  .palette-glass {
+    --background:215 60% 82%; --foreground:220 30% 12%;
+    --card:0 0% 100%; --card-foreground:220 30% 12%;
+    --popover:0 0% 100%; --popover-foreground:220 30% 12%;
+    --secondary:0 0% 100%; --secondary-foreground:220 30% 12%;
+    --muted:0 0% 100%; --muted-foreground:220 14% 36%; --label-foreground:220 20% 22%;
+    --accent:0 0% 100%; --accent-foreground:220 30% 12%;
+    --border:0 0% 100%; --input:0 0% 100%; --priority-low:220 14% 36%;
+    --shadow-rgb:20 30 80;
+    --glass-alpha:0.34; --glass-border-alpha:0.55; --glass-blur:14px;
+  }
+  .dark.palette-glass {
+    --background:232 45% 14%; --foreground:0 0% 96%;
+    --card:220 40% 30%; --card-foreground:0 0% 96%;
+    --popover:228 40% 20%; --popover-foreground:0 0% 96%;
+    --secondary:220 40% 30%; --secondary-foreground:0 0% 96%;
+    --muted:220 40% 30%; --muted-foreground:220 20% 75%; --label-foreground:220 25% 82%;
+    --accent:220 40% 30%; --accent-foreground:0 0% 96%;
+    --border:0 0% 100%; --input:0 0% 100%; --priority-low:220 20% 75%;
+    --shadow-rgb:0 0 20;
+    --glass-alpha:0.16; --glass-border-alpha:0.22; --glass-blur:14px;
+  }
+}
+
+/* Glass surfaces. Outside the layered blocks so they win over utility classes
+   without !important sprawl; scoped to .palette-glass so other palettes are
+   untouched. */
+/* The backdrop lives on a fixed pseudo-element: iOS Safari ignores
+   `background-attachment: fixed`, so painting the body would scroll/shrink. */
+.palette-glass body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  display: block;
+  background:
+    radial-gradient(60vmax 60vmax at 12% 8%, hsl(262 85% 72% / .75), transparent 60%),
+    radial-gradient(55vmax 55vmax at 88% 18%, hsl(196 90% 68% / .70), transparent 62%),
+    radial-gradient(60vmax 60vmax at 70% 95%, hsl(330 80% 74% / .55), transparent 60%),
+    hsl(var(--background));
+}
+.dark.palette-glass body::before {
+  background:
+    radial-gradient(60vmax 60vmax at 12% 8%, hsl(262 70% 40% / .75), transparent 60%),
+    radial-gradient(55vmax 55vmax at 88% 18%, hsl(200 80% 38% / .65), transparent 62%),
+    radial-gradient(60vmax 60vmax at 70% 95%, hsl(320 65% 36% / .55), transparent 60%),
+    hsl(var(--background));
+}
+
+.palette-glass .bg-card,
+.palette-glass .bg-popover {
+  background-color: hsl(var(--card) / var(--glass-alpha));
+  background-image: linear-gradient(145deg, hsl(0 0% 100% / .22), hsl(0 0% 100% / 0) 45%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(170%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(170%);
+  border-color: hsl(0 0% 100% / var(--glass-border-alpha));
+  box-shadow:
+    inset 0 1px 0 hsl(0 0% 100% / .45),
+    0 8px 32px rgb(var(--shadow-rgb) / .18);
+}
+/* Cards already carry radius via rounded-2xl; push the glass look a bit more. */
+.palette-glass .accent-border-top { border-top-width: 1px; }
+.palette-glass .icon-badge { background: hsl(0 0% 100% / .28); }
+.dark.palette-glass .icon-badge { background: hsl(0 0% 100% / .14); }
+
+/* Fallback for browsers without backdrop-filter: stay readable. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .palette-glass .bg-card, .palette-glass .bg-popover { background-color: hsl(var(--card) / .85); }
 }
 
 @layer base {
