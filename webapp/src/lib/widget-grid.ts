@@ -90,22 +90,38 @@ const isLayoutItem = (v: unknown): v is Layout => {
   );
 };
 
-/** Validate whatever came out of storage; anything odd means "no layout". */
+const slim = (ls: Layout[]) => ls.map(({ i, x, y, w, h }) => ({ i, x, y, w, h }));
+
+/**
+ * Validate a stored layout (from localStorage or the settings table). Anything
+ * odd, and the empty "reset" pair, mean "no custom layout".
+ */
+export function normalizeGridLayouts(input: unknown): GridLayouts | null {
+  if (!input || typeof input !== "object") return null;
+  const parsed = input as { v?: number; lg?: unknown; sm?: unknown };
+  if (parsed.v !== 1 || !Array.isArray(parsed.lg) || !Array.isArray(parsed.sm)) return null;
+  const lg = slim(parsed.lg.filter(isLayoutItem));
+  const sm = slim(parsed.sm.filter(isLayoutItem));
+  return lg.length === 0 && sm.length === 0 ? null : { lg, sm };
+}
+
 export function parseGridLayouts(raw: string | null): GridLayouts | null {
   if (!raw) return null;
   try {
-    const parsed = JSON.parse(raw) as { v?: number; lg?: unknown; sm?: unknown };
-    if (parsed?.v !== 1 || !Array.isArray(parsed.lg) || !Array.isArray(parsed.sm)) return null;
-    return {
-      lg: parsed.lg.filter(isLayoutItem).map(({ i, x, y, w, h }) => ({ i, x, y, w, h })),
-      sm: parsed.sm.filter(isLayoutItem).map(({ i, x, y, w, h }) => ({ i, x, y, w, h })),
-    };
+    return normalizeGridLayouts(JSON.parse(raw));
   } catch {
     return null;
   }
 }
 
+/** The object stored in the settings table. */
+export function gridPayload(layouts: GridLayouts) {
+  return { v: 1 as const, lg: slim(layouts.lg), sm: slim(layouts.sm) };
+}
+
+/** What "reset" writes: it must differ from "never customised" so other devices drop their copy too. */
+export const EMPTY_GRID_PAYLOAD = { v: 1 as const, lg: [], sm: [] };
+
 export function serializeGridLayouts(layouts: GridLayouts): string {
-  const slim = (ls: Layout[]) => ls.map(({ i, x, y, w, h }) => ({ i, x, y, w, h }));
-  return JSON.stringify({ v: 1, lg: slim(layouts.lg), sm: slim(layouts.sm) });
+  return JSON.stringify(gridPayload(layouts));
 }

@@ -29,6 +29,12 @@ export const SETTINGS_KEYS = {
   // absent means 3, 5, 10 and 15 (lib/timer-presets.ts).
   timerWidget: "timer_widget",
   countdowns: "countdowns",
+  // Dashboard free-form grid layout, shared by every device of the family:
+  // { v: 1, lg: Layout[], sm: Layout[] } (lib/widget-grid.ts). An empty pair
+  // means "back to the automatic grid"; absent means never customised.
+  widgetGrid: "widget_grid",
+  // YouTube widget shortcuts: { kind, id, title }[] (hooks/use-youtube-items.ts).
+  youtubeItems: "youtube_items",
   taskDisplay: "task_display",
   calendarDisplay: "calendar_display",
   schedulePackItems: "schedule_pack_items",
