@@ -12,7 +12,8 @@
 #  - Postgres is NOT published on the host at all. By default it is published
 #    on 0.0.0.0:5432, and Docker's port publishing bypasses ufw, so on a public
 #    VPS that would put the database on the internet;
-#  - go2rtc's WebRTC UDP port is not published (no cameras assumed).
+#  - go2rtc's WebRTC UDP port is not published (no cameras assumed);
+#  - the Google OAuth redirect URI is forwarded to the webapp (see below).
 #
 # `!override` / `!reset` need Docker Compose v2.24 or newer (Docker's own apt
 # repository ships it).
@@ -22,6 +23,12 @@ services:
     image: ghcr.io/mandje2p/kinboard:${KINBOARD_TAG:-feature-resizable-grid}
     ports: !override
       - "127.0.0.1:${WEBAPP_PORT:-3002}:3000"
+    environment:
+      # The base compose file forwards GOOGLE_CLIENT_ID/SECRET but not the
+      # redirect URI, so Google Calendar sync would fall back to
+      # http://localhost:3000/api/google/callback and Google would answer
+      # redirect_uri_mismatch. Default: the site's own address.
+      GOOGLE_REDIRECT_URI: ${GOOGLE_REDIRECT_URI:-${SITE_URL}/api/google/callback}
   db:
     ports: !reset []
   go2rtc:
