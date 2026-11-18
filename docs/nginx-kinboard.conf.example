@@ -1,10 +1,10 @@
 # /etc/nginx/sites-available/kinboard  (then: ln -s into sites-enabled)
-# Replace cuisine.example.fr with your sub-domain. Run certbot afterwards:
-#   sudo certbot --nginx -d cuisine.example.fr
+# Site for maison.2points.fr. Run certbot afterwards:
+#   sudo certbot --nginx -d maison.2points.fr
 server {
     listen 80;
     listen [::]:80;
-    server_name cuisine.example.fr;
+    server_name maison.2points.fr;
 
     # Photos and attachments are uploaded through the app.
     client_max_body_size 50m;

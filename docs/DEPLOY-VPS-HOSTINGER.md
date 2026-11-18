@@ -10,8 +10,8 @@ de **ne pas compiler l'image sur place** (on la télécharge) et d'ajouter du sw
 
 ## 0. Avant de commencer
 - Fais un **snapshot** du VPS (hPanel > VPS > Snapshots). Retour arrière en une minute.
-- Choisis un sous-domaine, par ex. `cuisine.tondomaine.fr`.
-- Ajoute un enregistrement DNS **A** : `cuisine` -> `168.231.84.170` (et AAAA -> `2a02:4780:28:f919::1`).
+- Le sous-domaine retenu est `maison.2points.fr`.
+- Ajoute un enregistrement DNS **A** : `maison` -> `168.231.84.170` (et AAAA -> `2a02:4780:28:f919::1`).
 
 ## 1. Construire l'image (sur GitHub, pas sur le VPS)
 1. Sur ton fork `mandje2p/kinboard` : onglet **Actions** > activer les workflows.
@@ -44,7 +44,7 @@ docker compose version   # doit afficher v2.24 ou plus
 sudo mkdir -p /opt/kinboard && sudo chown "$USER" /opt/kinboard
 git clone https://github.com/mandje2p/kinboard.git /opt/kinboard
 cd /opt/kinboard && git checkout feature/resizable-grid
-./setup.sh --non-interactive --url https://cuisine.tondomaine.fr
+./setup.sh --non-interactive --url https://maison.2points.fr
 cd webapp/docker
 # setup.sh a déjà écrit WEBAPP_PORT=3001 (pris par bnvce-api) : on remplace, on n'ajoute pas un doublon
 set_env() { if grep -q "^$1=" .env; then sed -i "s|^$1=.*|$1=$2|" .env; else echo "$1=$2" >> .env; fi; }
@@ -62,11 +62,10 @@ Vérifie que Postgres n'est pas exposé : `sudo ss -ltnp | grep 5432` ne doit ri
 ## 4. HTTPS avec le Nginx existant
 ```bash
 sudo cp /opt/kinboard/docs/nginx-kinboard.conf.example /etc/nginx/sites-available/kinboard
-sudo sed -i 's/cuisine.example.fr/cuisine.tondomaine.fr/' /etc/nginx/sites-available/kinboard
 sudo ln -s /etc/nginx/sites-available/kinboard /etc/nginx/sites-enabled/kinboard
 sudo nginx -t && sudo systemctl reload nginx      # ne recharge que si le test passe
 sudo apt-get install -y certbot python3-certbot-nginx
-sudo certbot --nginx -d cuisine.tondomaine.fr
+sudo certbot --nginx -d maison.2points.fr
 ```
 Vérifie ensuite que l'API existante répond toujours comme avant.
 
@@ -78,7 +77,7 @@ Vérifie ensuite que l'API existante répond toujours comme avant.
 - Ne publie jamais le port 5432 ni 3002 sur internet.
 
 ## 6. Sur l'iPad
-Ouvre `https://cuisine.tondomaine.fr` dans Safari, crée la famille, puis
+Ouvre `https://maison.2points.fr` dans Safari, crée la famille, puis
 Partager > Sur l'écran d'accueil. Réglages > Thème > Verre. Accès guidé pour verrouiller.
 
 ## Mises à jour
