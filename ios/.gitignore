@@ -1,0 +1,8 @@
+*.xcodeproj
+*.xcworkspace
+xcuserdata/
+DerivedData/
+build/
+.DS_Store
+KinboardShell/Info.plist
+KinboardShell/KinboardShell.entitlements
