@@ -20,6 +20,7 @@ import { useTimeFormat } from "@/hooks/use-time-format";
 // labels are resolved
 // per-locale via t("wasteCollectionWidget.types.{id}").
 import { WASTE_TYPES, detectWasteType, type WasteTypeId } from "@/lib/waste-types";
+import { useFitCount } from "@/components/widget-size-context";
 
 /**
  * How each bin looks. The keywords that decide *which* bin an entry is now
@@ -58,9 +59,10 @@ interface WasteCollectionWidgetProps {
 }
 
 export function WasteCollectionWidget({
-  maxItems = 4,
+  maxItems: maxItemsProp = 4,
   className = "",
 }: WasteCollectionWidgetProps) {
+  const maxItems = useFitCount(maxItemsProp, 52);
   const { formatTime } = useTimeFormat();
   const t = useTranslations("wasteCollectionWidget");
   const locale = useLocale();

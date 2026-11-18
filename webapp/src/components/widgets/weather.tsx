@@ -33,6 +33,7 @@ import { rainChanceShown } from "@/lib/rain-chance";
 import { useTimeFormat } from "@/hooks/use-time-format";
 import { WeatherModal } from "./weather-modal";
 import { WidgetCard } from "@/components/widget-card";
+import { useWidgetSize } from "@/components/widget-size-context";
 
 interface WeatherProps {
   className?: string;
@@ -142,6 +143,11 @@ export function Weather({ className = "" }: WeatherProps) {
   const { data: weatherData, isLoading, error } = useWeather();
   const { labels: unitLabels } = useWeatherUnits();
   const { data: forecast } = useWeatherForecast();
+  // Classic grid: no size, everything shows. In the free-form grid the card
+  // sheds detail as it shrinks: compact = temperature only, medium adds the
+  // details and sun times, large adds the multi-day forecast.
+  const size = useWidgetSize();
+  const tier = size?.tier ?? "large";
   // Sunrise and sunset arrive as "HH:mm" at the weather location — the server
   // works them out there and cannot know this household's clock setting.
   const { formatWallClock } = useTimeFormat();
@@ -163,7 +169,7 @@ export function Weather({ className = "" }: WeatherProps) {
   const WeatherIcon = getWeatherIcon(weatherData.conditionMain ?? weatherData.condition);
 
   // Get next 6 days forecast (skip today, show rest of the week)
-  const upcomingDays = forecast?.daily?.slice(1, 7) || [];
+  const upcomingDays = tier === "large" ? forecast?.daily?.slice(1, size && size.width < 480 ? 5 : 7) || [] : [];
 
   return (
     <TooltipProvider>
@@ -209,6 +215,7 @@ export function Weather({ className = "" }: WeatherProps) {
                 <p className="text-sm font-medium text-muted-foreground">{weatherData.condition}</p>
               </div>
             </div>
+            {tier !== "compact" && (
             <div className="flex flex-col gap-2 text-right">
               <Badge variant="neutral" className="font-medium">{weatherData.location}</Badge>
               <div className="flex flex-col gap-1 text-sm text-muted-foreground tabular-nums">
@@ -220,6 +227,7 @@ export function Weather({ className = "" }: WeatherProps) {
                 )}
               </div>
             </div>
+            )}
           </div>
 
           {/* Mini Forecast */}
@@ -262,7 +270,7 @@ export function Weather({ className = "" }: WeatherProps) {
           )}
 
           {/* Sun times */}
-          {weatherData.sunrise && weatherData.sunset && (
+          {tier !== "compact" && weatherData.sunrise && weatherData.sunset && (
             <div className={`flex items-center justify-center gap-6 ${upcomingDays.length > 0 ? "mt-3 pt-3" : "mt-4 pt-4"} border-t border-border/30`}>
               <Tooltip>
                 <TooltipTrigger asChild>

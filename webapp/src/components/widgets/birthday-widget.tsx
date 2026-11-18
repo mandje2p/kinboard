@@ -19,6 +19,7 @@ import {
   getDaysUntilBirthday,
   hasBirthYear,
 } from "@/lib/birthday";
+import { useFitCount } from "@/components/widget-size-context";
 
 interface BirthdayWidgetProps {
   maxItems?: number;
@@ -61,9 +62,10 @@ function BirthdayWidgetSkeleton() {
 }
 
 export function BirthdayWidget({
-  maxItems = 3,
+  maxItems: maxItemsProp = 3,
   className = "",
 }: BirthdayWidgetProps) {
+  const maxItems = useFitCount(maxItemsProp, 56);
   const t = useTranslations("birthdayWidget");
   const locale = useLocale();
   const dateLocale = getDateFnsLocale(locale);

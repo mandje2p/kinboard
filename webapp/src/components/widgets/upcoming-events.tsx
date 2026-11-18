@@ -17,6 +17,7 @@ import { toLocalDateKey } from "@/lib/local-date";
 import { WidgetCard } from "@/components/widget-card";
 import { EventPill } from "@/components/event-pill";
 import { useTimeFormat } from "@/hooks/use-time-format";
+import { useFitCount, useWidgetSize } from "@/components/widget-size-context";
 
 interface UpcomingEventsProps {
   maxEvents?: number;
@@ -55,9 +56,12 @@ function UpcomingEventsSkeleton() {
 }
 
 export function UpcomingEvents({
-  maxEvents = 5,
+  maxEvents: maxEventsProp = 5,
   className = "",
 }: UpcomingEventsProps) {
+  const maxEvents = useFitCount(maxEventsProp, 60);
+  // In the free-form grid the cell sets the height; the classic 220px cap would fight it.
+  const inGrid = useWidgetSize() !== null;
   const { formatTime } = useTimeFormat();
   const t = useTranslations("upcomingEvents");
   const tCalendar = useTranslations("calendar");
@@ -203,7 +207,7 @@ export function UpcomingEvents({
       }
       className={`h-full ${className}`}
     >
-      <ScrollArea className="pr-2 sm:max-h-[220px]">
+      <ScrollArea className={inGrid ? "pr-2" : "pr-2 sm:max-h-[220px]"}>
         <motion.div variants={container} initial="hidden" animate="show" className="flex flex-col gap-1.5">
           {(() => {
             const sliced = displayEvents.slice(0, maxEvents);

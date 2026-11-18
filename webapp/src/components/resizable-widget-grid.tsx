@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, type ReactNode } from "react";
 import { Responsive, WidthProvider, type Layout } from "react-grid-layout";
+import { WidgetSizeProvider } from "@/components/widget-size-context";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import {
@@ -68,7 +69,7 @@ export default function ResizableWidgetGrid({ items, layouts, editing, onLayouts
       >
         {items.map((item) => (
           <div key={item.id} className="kb-grid-item">
-            <div className="kb-cell">{item.node}</div>
+            <WidgetSizeProvider>{item.node}</WidgetSizeProvider>
           </div>
         ))}
       </ResponsiveGrid>

@@ -28,6 +28,7 @@ import { todayPerson } from "@/lib/todo-turns";
 import { PersonAvatar } from "@/components/person-avatar";
 import { DoneByPicker } from "@/components/done-by-picker";
 import { asksWhoDidIt } from "@/lib/done-by";
+import { useFitCount } from "@/components/widget-size-context";
 
 interface TasksWidgetProps {
   maxItems?: number;
@@ -52,9 +53,10 @@ function TasksWidgetSkeleton() {
 }
 
 export function TasksWidget({
-  maxItems = 5,
+  maxItems: maxItemsProp = 5,
   className = "",
 }: TasksWidgetProps) {
+  const maxItems = useFitCount(maxItemsProp, 48);
   const t = useTranslations("tasksWidget");
   const { data: todos, isLoading, isError } = useTodos();
   const { data: people } = usePeople();

@@ -12,6 +12,7 @@ import { WidgetCard } from "@/components/widget-card";
 import { ChecklistItem } from "@/components/checklist-item";
 import { useShoppingItems, useUpdateShoppingItem } from "@/hooks";
 import { toast } from "sonner";
+import { useFitCount } from "@/components/widget-size-context";
 
 interface ShoppingWidgetProps {
   maxItems?: number;
@@ -32,7 +33,8 @@ function ShoppingWidgetSkeleton() {
   );
 }
 
-export function ShoppingWidget({ maxItems = 4, className = "" }: ShoppingWidgetProps) {
+export function ShoppingWidget({ maxItems: maxItemsProp = 4, className = "" }: ShoppingWidgetProps) {
+  const maxItems = useFitCount(maxItemsProp, 40);
   const t = useTranslations("shoppingWidget");
   const { data: items, isLoading, isError } = useShoppingItems();
   const updateItem = useUpdateShoppingItem();

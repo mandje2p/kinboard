@@ -36,6 +36,7 @@ import Link from "next/link";
 import { useNotes, useCreateNote, useDeleteNote } from "@/hooks";
 import { formatDistanceToNow } from "date-fns";
 import { getDateFnsLocale } from "@/lib/date-fns-locale";
+import { useFitCount } from "@/components/widget-size-context";
 
 interface NotesWidgetProps {
   maxItems?: number;
@@ -62,9 +63,10 @@ function NotesWidgetSkeleton() {
 }
 
 export function NotesWidget({
-  maxItems = 4,
+  maxItems: maxItemsProp = 4,
   className = "",
 }: NotesWidgetProps) {
+  const maxItems = useFitCount(maxItemsProp, 76);
   const t = useTranslations("notesWidget");
   const tCommon = useTranslations("common");
   const locale = useLocale();

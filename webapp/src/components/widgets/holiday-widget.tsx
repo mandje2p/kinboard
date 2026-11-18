@@ -12,6 +12,7 @@ import { useHolidayRegion, useToday } from "@/hooks";
 import { getDateFnsLocale } from "@/lib/date-fns-locale";
 import { daysUntilHoliday, nextHolidays } from "@/lib/holidays";
 import { holidayLabel } from "@/lib/holidays/label";
+import { useFitCount } from "@/components/widget-size-context";
 
 interface HolidayWidgetProps {
   maxItems?: number;
@@ -23,7 +24,8 @@ interface HolidayWidgetProps {
  * the days left. A palm tree marks the ones that are a day off -- and, for one
  * that falls on a weekend and is taken on a weekday instead, which weekday.
  */
-export function HolidayWidget({ maxItems = 3, className = "" }: HolidayWidgetProps) {
+export function HolidayWidget({ maxItems: maxItemsProp = 3, className = "" }: HolidayWidgetProps) {
+  const maxItems = useFitCount(maxItemsProp, 52);
   const t = useTranslations("holidayWidget");
   const tHolidays = useTranslations("holidays");
   const locale = useLocale();
